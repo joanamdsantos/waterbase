@@ -1,25 +1,27 @@
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 
-schema = pd.read_csv(filepath_or_buffer='Waterbase_v2018_1_T_WISE4_DisaggregatedData_Schema.csv')
+
+
+schema = pd.read_csv(filepath_or_buffer='Waterbase_v2018_1_T_WISE4_AggregatedData_schema.csv')
 
 def get_description(column_name, schema=schema):
     '''
     INPUT:
-        schema - pandas dataframe with the schema of the developers survey
+        schema - pandas dataframe with the schema of waterbase
         column_name - string - the name of the column you would like to know about
     OUTPUT:
         desc - string - the description of the column
     '''
-    desc = list(schema[schema.Column == column_name]['Question'])[0]
+    
+    desc = list(schema[schema['Element name'] == column_name]['Element definition'])[0]
     return desc
 
 
-def categorical_profile(category_list, top_categ, normalize=True)
+def categorical_profile(df, category_list, top_categ, normalize=True):
     '''
     INPUT:
+        df - pandas dataframe with the data from the waterbase
         category_list - list of categorical variables to profile
         top_categ - top number of categories to show
         normalize - False to include Nulls or NAN
@@ -31,11 +33,11 @@ def categorical_profile(category_list, top_categ, normalize=True)
     profile = pd.DataFrame()
     
     # Create a DataFrame with the percentage for each category 
-    for i in catg:
-        if normalize=True:
+    for i in category_list:
+        if normalize:
             catg_perc= df[i].value_counts(normalize=True).sort_values(ascending=False)*100 # Relative, No nulls
         #catg_perc= df[i].value_counts().sort_values(ascending=False)/df.shape[0]*100 # Overall
-        else
+        else:
             catg_perc= df[i].value_counts().sort_values(ascending=False)
 
         # Select the top in categories to display
@@ -44,7 +46,7 @@ def categorical_profile(category_list, top_categ, normalize=True)
         
 
         #Create a dataframe with multiple index:
-        catg_list = [i]*10
+        catg_list = [i]*top_categ
         tuples = list(zip(catg_list, catg_topi))
         catg_df = pd.DataFrame({'Percentage(%)' : catg_top.values}, 
                                index = pd.MultiIndex.from_tuples(tuples, names=['Group', 'Sub-Group']))
