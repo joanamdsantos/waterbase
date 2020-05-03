@@ -3,7 +3,7 @@ import pandas as pd
 
 
 
-schema = pd.read_csv(filepath_or_buffer='Waterbase_v2018_1_T_WISE4_AggregatedData_schema.csv')
+schema = pd.DataFrame()
 
 def get_description(column_name, schema=schema):
     '''
@@ -14,7 +14,7 @@ def get_description(column_name, schema=schema):
         desc - string - the description of the column
     '''
     
-    desc = list(schema[schema['Element name'] == column_name]['Element definition'])[0]
+    desc = list(schema[schema['Id'] == column_name]['Label'])[0]
     return desc
 
 
